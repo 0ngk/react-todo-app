@@ -22,7 +22,7 @@ export default function Home() {
   return (
     <>
       <Navigation/>
-      <TodoList todos={todos} />
+      <TodoList todos={todos} setTodos={setTodos} />
     </>
   );
 }

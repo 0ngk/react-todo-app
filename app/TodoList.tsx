@@ -1,9 +1,13 @@
 'use client';
 
-export const TodoList = ({ todos }: { todos: Todo[] }) => {
+import { Dispatch, SetStateAction } from "react";
+
+type SetTodos = Dispatch<SetStateAction<Todo[]>>;
+
+export const TodoList = ({ todos, setTodos }: { todos: Todo[], setTodos: SetTodos }) => {
   return (
     <div>
-      { todos.map(todo => <Todo key={todo.id} todo={todo}/>) }
+      { todos.map(todo => <Todo key={todo.id} todo={todo} setTodos={setTodos} />) }
     </div>
   );
 }
@@ -16,17 +20,17 @@ export type Todo = {
   isCompleted: boolean,
 }
 
-const Todo = ({todo}: { todo: Todo }) => {
+const Todo = ({todo, setTodos }: { todo: Todo, setTodos: SetTodos }) => {
   return (
     <div>
-      <TodoLeft isCompleted={todo.isCompleted} />
-      <TodoCenter title={todo.title} description={todo.description} due={todo.due} />
-      <TodoRight/>
+      <TodoLeft setTodos={setTodos} isCompleted={todo.isCompleted} />
+      <TodoCenter setTodos={setTodos} title={todo.title} description={todo.description} due={todo.due} />
+      <TodoRight setTodos={setTodos} />
     </div>
   );
 }
 
-const TodoLeft = ({ isCompleted }: { isCompleted: boolean }) => {
+const TodoLeft = ({ setTodos, id, isCompleted }: { setTodos: SetTodos, id: string, isCompleted: boolean }) => {
   const handleOnChange = () => {}
   
   return (
@@ -35,7 +39,7 @@ const TodoLeft = ({ isCompleted }: { isCompleted: boolean }) => {
 }
 
 const TodoCenter = (
-  { title, description, due }: { title: string, description: string, due?: Date }
+  { setTodos, title, description, due }: { setTodos: SetTodos, title: string, description: string, due?: Date }
 ) => {
   return (
     <div>
@@ -46,9 +50,11 @@ const TodoCenter = (
   );
 }
 
-const TodoRight = () => {
+const TodoRight = ({ setTodos, id }: { setTodos: SetTodos, id: string }) => {
   const handleEdit = () => {}
-  const handleDelete = () => {}
+  const handleDelete = () => {
+    setTodos(todos_ => todos_.filter(t_ => t_.id !== id))
+  }
   return (
     <div>
       <Button onClick={handleEdit} value="Edit" />
