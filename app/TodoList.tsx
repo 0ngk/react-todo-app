@@ -30,9 +30,7 @@ const TodoLeft = ({ isCompleted }: { isCompleted: boolean }) => {
   const handleOnChange = () => {}
   
   return (
-    <div>
-      <CheckBox onChange={handleOnChange} isChecked={isCompleted} />
-    </div>
+    <CheckBox onChange={handleOnChange} isChecked={isCompleted} />
   );
 }
 
@@ -67,8 +65,6 @@ const CheckBox = ({ onChange, isChecked }: { onChange: () => void, isChecked: bo
 
 const Button = ({ onClick, value }: { onClick: () => void, value: string }) => {
   return (
-    <>
-      <button onClick={onClick}>{value}</button>
-    </>
+    <button onClick={onClick}>{value}</button>
   );
 }
