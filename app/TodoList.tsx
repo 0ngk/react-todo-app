@@ -23,9 +23,9 @@ export type Todo = {
 const Todo = ({todo, setTodos }: { todo: Todo, setTodos: SetTodos }) => {
   return (
     <div>
-      <TodoLeft setTodos={setTodos} isCompleted={todo.isCompleted} />
+      <TodoLeft setTodos={setTodos} id={todo.id} isCompleted={todo.isCompleted} />
       <TodoCenter setTodos={setTodos} title={todo.title} description={todo.description} due={todo.due} />
-      <TodoRight setTodos={setTodos} />
+      <TodoRight setTodos={setTodos} id={todo.id} />
     </div>
   );
 }
