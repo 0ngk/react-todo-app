@@ -1,15 +1,16 @@
 'use client';
 
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Pencil, Trash } from 'lucide-react';
+import { Pencil, Plus, Trash } from 'lucide-react';
 
 type SetTodos = Dispatch<SetStateAction<Todo[]>>;
 
 export const TodoList = ({ todos, setTodos }: { todos: Todo[], setTodos: SetTodos }) => {
   return (
     <div>
+      <TodoForm todos={todos} setTodos={setTodos}/>
       { todos.map(todo => <Todo key={todo.id} todo={todo} setTodos={setTodos} />) }
     </div>
   );
@@ -21,6 +22,69 @@ export type Todo = {
   description: string,
   due?: Date,
   isCompleted: boolean,
+}
+
+const TodoForm = ({ todos, setTodos }: { todos: Todo[], setTodos: SetTodos }) => {
+  const emptyTodo: Todo = {
+    id: "",
+    title: "",
+    description: "",
+    isCompleted: false,
+  }
+  const [todo, setTodo] = useState(emptyTodo)
+  const handleFormSubmission = () => {
+    setTodos(todos.concat({
+      ...todo,
+      id: crypto.randomUUID(),
+    }))
+    setTodo(emptyTodo)
+  }
+
+  return (
+    <form onSubmit={e => {
+      e.preventDefault();
+    }}>
+      <div>
+        <label>
+          title:{" "}
+            <input
+              value={todo.title}
+              onChange={e => {
+                setTodo({...todo, title: e.target.value})
+              }}
+            />
+        </label>
+      </div>
+      <div>
+        <label>
+          description:{" "}
+            <input
+              value={todo.description}
+              onChange={e => {
+                setTodo({...todo, description: e.target.value})
+              }}
+            />
+        </label>
+      </div>
+      <div>
+        <label>
+          due:{" "}
+            <input
+              type="date"
+              value={todo.due && `${todo.due.getFullYear()}-${(todo.due.getMonth() + 1).toString().padStart(2, "0")}-${todo.due.getDate().toString().padStart(2, "0")}`}
+              onChange={e => {
+                setTodo({...todo, due: new Date(e.target.value)})
+              }}
+            />
+        </label>
+      </div>
+      <div>
+        <Button onClick={handleFormSubmission} disabled={todo.title === ""}>
+          <Plus />
+        </Button>
+      </div>
+    </form>
+  );
 }
 
 const Todo = ({todo, setTodos }: { todo: Todo, setTodos: SetTodos }) => {
