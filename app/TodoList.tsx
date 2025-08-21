@@ -25,17 +25,19 @@ export type Todo = {
 }
 
 const TodoForm = ({ todos, setTodos }: { todos: Todo[], setTodos: SetTodos }) => {
-  const [todo, setTodo] = useState({
+  const emptyTodo: Todo = {
+    id: "",
     title: "",
     description: "",
-    due: new Date(),
     isCompleted: false,
-  })
+  }
+  const [todo, setTodo] = useState(emptyTodo)
   const handleFormSubmission = () => {
     setTodos(todos.concat({
       ...todo,
       id: crypto.randomUUID(),
     }))
+    setTodo(emptyTodo)
   }
 
   return (
@@ -69,7 +71,7 @@ const TodoForm = ({ todos, setTodos }: { todos: Todo[], setTodos: SetTodos }) =>
           due:{" "}
             <input
               type="date"
-              value={`${todo.due.getFullYear()}-${(todo.due.getMonth() + 1).toString().padStart(2, "0")}-${todo.due.getDate().toString().padStart(2, "0")}`}
+              value={todo.due && `${todo.due.getFullYear()}-${(todo.due.getMonth() + 1).toString().padStart(2, "0")}-${todo.due.getDate().toString().padStart(2, "0")}`}
               onChange={e => {
                 setTodo({...todo, due: new Date(e.target.value)})
               }}
