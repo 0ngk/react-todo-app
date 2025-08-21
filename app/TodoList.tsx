@@ -3,6 +3,8 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { Pencil, Plus, Save, Trash } from 'lucide-react';
 
 type SetTodos = Dispatch<SetStateAction<Todo[]>>;
@@ -47,42 +49,33 @@ const TodoForm = ({ todos, setTodos }: { todos: Todo[], setTodos: SetTodos }) =>
   }
 
   return (
-    <form onSubmit={e => {
+    <form className="flex flex-col gap-4" onSubmit={e => {
       e.preventDefault();
     }}>
-      <div>
-        <label>
-          title:{" "}
-            <input
-              value={todo.title}
+      <div className="grid w-full max-w-sm items-center gap-3">
+        <Label htmlFor="title">Title</Label>
+        <Input id="title" placeholder="Title" value={todo.title} 
               onChange={e => {
                 setTodo({...todo, title: e.target.value})
               }}
-            />
-        </label>
+        />
       </div>
-      <div>
-        <label>
-          description:{" "}
-            <input
-              value={todo.description}
+      <div className="grid w-full max-w-sm items-center gap-3">
+        <Label htmlFor="description">Description</Label>
+        <Input id="description" placeholder="Description" value={todo.description} 
               onChange={e => {
                 setTodo({...todo, description: e.target.value})
               }}
-            />
-        </label>
+        />
       </div>
-      <div>
-        <label>
-          due:{" "}
-            <input
-              type="date"
+      <div className="grid w-full max-w-sm items-center gap-3">
+        <Label htmlFor="due">Due</Label>
+        <Input type="date" id="due"
               value={todo.due && convertToIso8601(todo.due)}
               onChange={e => {
                 setTodo({...todo, due: new Date(e.target.value)})
               }}
-            />
-        </label>
+        />
       </div>
       <div>
         <Button onClick={handleFormSubmission} disabled={todo.title === ""}>
