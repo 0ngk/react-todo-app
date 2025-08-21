@@ -1,6 +1,7 @@
 'use client';
 
 import { Dispatch, SetStateAction } from "react";
+import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 
 type SetTodos = Dispatch<SetStateAction<Todo[]>>;
@@ -62,8 +63,8 @@ const TodoRight = ({ setTodos, id }: { setTodos: SetTodos, id: string }) => {
   }
   return (
     <div>
-      <Button onClick={handleEdit} value="Edit" />
-      <Button onClick={handleDelete} value="Delete" />
+      <Button onClick={handleEdit}>Edit</Button>
+      <Button onClick={handleDelete} value="Delete" variant="destructive">Delete</Button>
     </div>
   );
 }
@@ -75,8 +76,8 @@ const CheckBox = ({ onChange, isChecked }: { onChange: () => void, isChecked: bo
   )
 }
 
-const Button = ({ onClick, value }: { onClick: () => void, value: string }) => {
-  return (
-    <button onClick={onClick}>{value}</button>
-  );
-}
+// const Button = ({ onClick, value }: { onClick: () => void, value: string }) => {
+//   return (
+//     <button onClick={onClick}>{value}</button>
+//   );
+// }
