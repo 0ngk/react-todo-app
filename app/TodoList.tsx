@@ -71,13 +71,6 @@ const TodoRight = ({ setTodos, id }: { setTodos: SetTodos, id: string }) => {
 
 const CheckBox = ({ onChange, isChecked }: { onChange: () => void, isChecked: boolean }) => {
   return (
-    // <input type="checkbox" onChange={onChange} checked={isChecked} />
-<Checkbox />
+    <Checkbox />
   )
 }
-
-// const Button = ({ onClick, value }: { onClick: () => void, value: string }) => {
-//   return (
-//     <button onClick={onClick}>{value}</button>
-//   );
-// }
