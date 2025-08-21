@@ -18,6 +18,13 @@ export default function Home() {
       description: "洗顔料を使う",
       isCompleted: true,
     },
+    {
+      id: "id-3",
+      title: "トマトを買う",
+      description: "スーパーで",
+      due: new Date("2025-10-11"),
+      isCompleted: false,
+    },
   ]);
   return (
     <>
