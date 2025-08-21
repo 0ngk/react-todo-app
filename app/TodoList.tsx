@@ -75,7 +75,7 @@ const TodoForm = ({ todos, setTodos }: { todos: Todo[], setTodos: SetTodos }) =>
           due:{" "}
             <input
               type="date"
-              value={todo.due && `${todo.due.getFullYear()}-${(todo.due.getMonth() + 1).toString().padStart(2, "0")}-${todo.due.getDate().toString().padStart(2, "0")}`}
+              value={todo.due && convertToIso8601(todo.due)}
               onChange={e => {
                 setTodo({...todo, due: new Date(e.target.value)})
               }}
