@@ -1,7 +1,6 @@
 'use client';
 
-import { Todo, TodoList } from "./TodoList";
-import { Navigation } from "./Navigation";
+import { TodoList } from "./TodoList";
 import { useState } from "react";
 
 export default function Home() {
@@ -28,7 +27,6 @@ export default function Home() {
   ]);
   return (
     <>
-      <Navigation/>
       <TodoList todos={todos} setTodos={setTodos} />
     </>
   );
