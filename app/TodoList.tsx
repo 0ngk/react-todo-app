@@ -1,7 +1,9 @@
 'use client';
 
 import { Dispatch, SetStateAction } from "react";
+import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Pencil, Trash } from 'lucide-react';
 
 type SetTodos = Dispatch<SetStateAction<Todo[]>>;
 
@@ -62,21 +64,18 @@ const TodoRight = ({ setTodos, id }: { setTodos: SetTodos, id: string }) => {
   }
   return (
     <div>
-      <Button onClick={handleEdit} value="Edit" />
-      <Button onClick={handleDelete} value="Delete" />
+      <Button onClick={handleEdit}>
+        <Pencil />
+      </Button>
+      <Button onClick={handleDelete} value="Delete" variant="destructive">
+        <Trash />
+      </Button>
     </div>
   );
 }
 
 const CheckBox = ({ onChange, isChecked }: { onChange: () => void, isChecked: boolean }) => {
   return (
-    // <input type="checkbox" onChange={onChange} checked={isChecked} />
-<Checkbox />
+    <Checkbox />
   )
-}
-
-const Button = ({ onClick, value }: { onClick: () => void, value: string }) => {
-  return (
-    <button onClick={onClick}>{value}</button>
-  );
 }
