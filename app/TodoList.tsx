@@ -31,10 +31,14 @@ const Todo = ({todo, setTodos }: { todo: Todo, setTodos: SetTodos }) => {
 }
 
 const TodoLeft = ({ setTodos, id, isCompleted }: { setTodos: SetTodos, id: string, isCompleted: boolean }) => {
-  const handleOnChange = () => {}
+  const handleCheck = () => {
+    setTodos(todos_ => todos_.map(t_ => {
+      return t_.id === id ? {...t_, isCompleted: !t_.isCompleted}: t_;
+    }))
+  }
   
   return (
-    <CheckBox onChange={handleOnChange} isChecked={isCompleted} />
+    <CheckBox onChange={handleCheck} isChecked={isCompleted} />
   );
 }
 
