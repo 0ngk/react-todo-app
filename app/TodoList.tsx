@@ -11,9 +11,11 @@ type SetIsEditing = Dispatch<SetStateAction<boolean>>;
 
 export const TodoList = ({ todos, setTodos }: { todos: Todo[], setTodos: SetTodos }) => {
   return (
-    <div>
+    <div className="container mx-auto">
       <TodoForm todos={todos} setTodos={setTodos}/>
-      { todos.map(todo => <Todo key={todo.id} todo={todo} setTodos={setTodos} />) }
+      <div className="px-6 grid gap-6">
+        { todos.map(todo => <Todo key={todo.id} todo={todo} setTodos={setTodos} />) }
+      </div>
     </div>
   );
 }
@@ -96,54 +98,50 @@ const Todo = ({todo, setTodos }: { todo: Todo, setTodos: SetTodos }) => {
   const [isEditing, setIsEditing] = useState(false)
 
   return (
-    <div>
-      <TodoLeft setTodos={setTodos} id={todo.id} isCompleted={todo.isCompleted} />
-      <TodoCenter isEditing={isEditing} todo={todo} todoForEdit={todoForEdit} setTodoForEdit={SetTodoForEdit} />
+    <div className="flex items-center justify-between gap-4">
+      <TodoCenter setTodos={setTodos} isEditing={isEditing} todo={todo} todoForEdit={todoForEdit} setTodoForEdit={SetTodoForEdit} />
       <TodoRight setTodos={setTodos} isEditing={isEditing} setIsEditing={setIsEditing} todoForEdit={todoForEdit} id={todo.id} />
     </div>
   );
 }
 
-const TodoLeft = ({ setTodos, id, isCompleted }: { setTodos: SetTodos, id: string, isCompleted: boolean }) => {
+const TodoCenter = (
+  { setTodos, isEditing, todo, todoForEdit, setTodoForEdit }: { 
+    setTodos: SetTodos, isEditing: boolean, todo: Todo, todoForEdit: Todo, setTodoForEdit: SetTodoForEdit
+  }
+) => {
   const handleCheck = () => {
     setTodos(todos_ => todos_.map(t_ => {
-      return t_.id === id ? {...t_, isCompleted: !t_.isCompleted}: t_;
+      return t_.id === todo.id ? {...t_, isCompleted: !t_.isCompleted}: t_;
     }))
   }
   
   return (
-    <CheckBox onChange={handleCheck} isChecked={isCompleted} />
-  );
-}
-
-const TodoCenter = (
-  { isEditing, todo, todoForEdit, setTodoForEdit }: { 
-    isEditing: boolean, todo: Todo, todoForEdit: Todo, setTodoForEdit: SetTodoForEdit
-  }
-) => {
-  return (
-    <div>
-      { 
-        isEditing
-        ? <div><input onChange={(e) => {
-            setTodoForEdit({...todoForEdit, title: e.target.value})
-          }} value={todoForEdit.title}/></div>
-        : <p>{todoForEdit.title}</p>
-      }
-      { 
-        isEditing
-        ? <div><input onChange={(e) => {
-            setTodoForEdit({...todoForEdit, description: e.target.value})
-          }} value={todoForEdit.description}/></div>
-        : <p>{todoForEdit.description}</p>
-      }
-      { 
-        isEditing
-        ? <div><input onChange={(e) => {
-            setTodoForEdit({...todoForEdit, due: new Date(e.target.value)})
-          }} type="date" value={todoForEdit.due && convertToIso8601(todoForEdit.due)}/></div>
-        : <p>{todoForEdit.due?.toString()}</p>
-      }
+    <div className="flex items-center gap-4">
+      <CheckBox onChange={handleCheck} isChecked={todo.isCompleted} />
+      <div className="flex flex-col gap-0.5">
+        { 
+          isEditing
+          ? <div><input onChange={(e) => {
+              setTodoForEdit({...todoForEdit, title: e.target.value})
+            }} value={todoForEdit.title}/></div>
+          : <p className="font-medium">{todoForEdit.title}</p>
+        }
+        { 
+          isEditing
+          ? <div><input onChange={(e) => {
+              setTodoForEdit({...todoForEdit, description: e.target.value})
+            }} value={todoForEdit.description}/></div>
+          : <p className="text-xs">{todoForEdit.description}</p>
+        }
+        { 
+          isEditing
+          ? <div><input onChange={(e) => {
+              setTodoForEdit({...todoForEdit, due: new Date(e.target.value)})
+            }} type="date" value={todoForEdit.due && convertToIso8601(todoForEdit.due)}/></div>
+          : <p>{todoForEdit.due?.toString()}</p>
+        }
+      </div>
     </div>
   );
 }
@@ -162,7 +160,7 @@ const TodoRight = (
     setTodos(todos_ => todos_.filter(t_ => t_.id !== id))
   }
   return (
-    <div>
+    <div className="flex justify-center items-center gap-4">
       <Button onClick={handleEdit}>
         {
           isEditing ? <Save /> : <Pencil />
