@@ -1,6 +1,7 @@
 'use client';
 
 import { Dispatch, SetStateAction } from "react";
+import { Checkbox } from "@/components/ui/checkbox"
 
 type SetTodos = Dispatch<SetStateAction<Todo[]>>;
 
@@ -31,10 +32,14 @@ const Todo = ({todo, setTodos }: { todo: Todo, setTodos: SetTodos }) => {
 }
 
 const TodoLeft = ({ setTodos, id, isCompleted }: { setTodos: SetTodos, id: string, isCompleted: boolean }) => {
-  const handleOnChange = () => {}
+  const handleCheck = () => {
+    setTodos(todos_ => todos_.map(t_ => {
+      return t_.id === id ? {...t_, isCompleted: !t_.isCompleted}: t_;
+    }))
+  }
   
   return (
-    <CheckBox onChange={handleOnChange} isChecked={isCompleted} />
+    <CheckBox onChange={handleCheck} isChecked={isCompleted} />
   );
 }
 
@@ -65,7 +70,8 @@ const TodoRight = ({ setTodos, id }: { setTodos: SetTodos, id: string }) => {
 
 const CheckBox = ({ onChange, isChecked }: { onChange: () => void, isChecked: boolean }) => {
   return (
-    <input type="checkbox" onChange={onChange} checked={isChecked} />
+    // <input type="checkbox" onChange={onChange} checked={isChecked} />
+<Checkbox />
   )
 }
 
