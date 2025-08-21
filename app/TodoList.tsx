@@ -3,9 +3,11 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Pencil, Plus, Trash } from 'lucide-react';
+import { Pencil, Plus, Save, Trash } from 'lucide-react';
 
 type SetTodos = Dispatch<SetStateAction<Todo[]>>;
+type SetTodoForEdit = Dispatch<SetStateAction<Todo>>;
+type SetIsEditing = Dispatch<SetStateAction<boolean>>;
 
 export const TodoList = ({ todos, setTodos }: { todos: Todo[], setTodos: SetTodos }) => {
   return (
@@ -23,6 +25,8 @@ export type Todo = {
   due?: Date,
   isCompleted: boolean,
 }
+
+const convertToIso8601 = (date: Date) => `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`
 
 const TodoForm = ({ todos, setTodos }: { todos: Todo[], setTodos: SetTodos }) => {
   const emptyTodo: Todo = {
@@ -88,11 +92,14 @@ const TodoForm = ({ todos, setTodos }: { todos: Todo[], setTodos: SetTodos }) =>
 }
 
 const Todo = ({todo, setTodos }: { todo: Todo, setTodos: SetTodos }) => {
+  const [todoForEdit, SetTodoForEdit] = useState(todo)
+  const [isEditing, setIsEditing] = useState(false)
+
   return (
     <div>
       <TodoLeft setTodos={setTodos} id={todo.id} isCompleted={todo.isCompleted} />
-      <TodoCenter setTodos={setTodos} title={todo.title} description={todo.description} due={todo.due} />
-      <TodoRight setTodos={setTodos} id={todo.id} />
+      <TodoCenter isEditing={isEditing} todo={todo} todoForEdit={todoForEdit} setTodoForEdit={SetTodoForEdit} />
+      <TodoRight setTodos={setTodos} isEditing={isEditing} setIsEditing={setIsEditing} todoForEdit={todoForEdit} id={todo.id} />
     </div>
   );
 }
@@ -110,26 +117,56 @@ const TodoLeft = ({ setTodos, id, isCompleted }: { setTodos: SetTodos, id: strin
 }
 
 const TodoCenter = (
-  { setTodos, title, description, due }: { setTodos: SetTodos, title: string, description: string, due?: Date }
+  { isEditing, todo, todoForEdit, setTodoForEdit }: { 
+    isEditing: boolean, todo: Todo, todoForEdit: Todo, setTodoForEdit: SetTodoForEdit
+  }
 ) => {
   return (
     <div>
-      <p>{title}</p>
-      <p>{description}</p>
-      <p>{due?.toString()}</p>
+      { 
+        isEditing
+        ? <div><input onChange={(e) => {
+            setTodoForEdit({...todoForEdit, title: e.target.value})
+          }} value={todoForEdit.title}/></div>
+        : <p>{todoForEdit.title}</p>
+      }
+      { 
+        isEditing
+        ? <div><input onChange={(e) => {
+            setTodoForEdit({...todoForEdit, description: e.target.value})
+          }} value={todoForEdit.description}/></div>
+        : <p>{todoForEdit.description}</p>
+      }
+      { 
+        isEditing
+        ? <div><input onChange={(e) => {
+            setTodoForEdit({...todoForEdit, due: new Date(e.target.value)})
+          }} type="date" value={todoForEdit.due && convertToIso8601(todoForEdit.due)}/></div>
+        : <p>{todoForEdit.due?.toString()}</p>
+      }
     </div>
   );
 }
 
-const TodoRight = ({ setTodos, id }: { setTodos: SetTodos, id: string }) => {
-  const handleEdit = () => {}
+const TodoRight = (
+  { setTodos, isEditing, setIsEditing, todoForEdit, id }: {
+    setTodos: SetTodos, isEditing: boolean, setIsEditing: SetIsEditing, todoForEdit: Todo, id: string
+  }
+) => {
+  const handleEdit = () => {
+    setIsEditing(ie => !ie)
+    if (!isEditing) return;
+    setTodos(todos_ => todos_.map(t_ => t_.id === id ? todoForEdit : t_))
+  }
   const handleDelete = () => {
     setTodos(todos_ => todos_.filter(t_ => t_.id !== id))
   }
   return (
     <div>
       <Button onClick={handleEdit}>
-        <Pencil />
+        {
+          isEditing ? <Save /> : <Pencil />
+        }
       </Button>
       <Button onClick={handleDelete} value="Delete" variant="destructive">
         <Trash />
