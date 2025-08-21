@@ -3,6 +3,7 @@
 import { Dispatch, SetStateAction } from "react";
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Pencil, Trash } from 'lucide-react';
 
 type SetTodos = Dispatch<SetStateAction<Todo[]>>;
 
@@ -63,8 +64,12 @@ const TodoRight = ({ setTodos, id }: { setTodos: SetTodos, id: string }) => {
   }
   return (
     <div>
-      <Button onClick={handleEdit}>Edit</Button>
-      <Button onClick={handleDelete} value="Delete" variant="destructive">Delete</Button>
+      <Button onClick={handleEdit}>
+        <Pencil />
+      </Button>
+      <Button onClick={handleDelete} value="Delete" variant="destructive">
+        <Trash />
+      </Button>
     </div>
   );
 }
