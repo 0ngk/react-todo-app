@@ -13,7 +13,7 @@ type SetIsEditing = Dispatch<SetStateAction<boolean>>;
 
 export const TodoList = ({ todos, setTodos }: { todos: Todo[], setTodos: SetTodos }) => {
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto mt-5 ml-5">
       <TodoForm todos={todos} setTodos={setTodos}/>
       <div className="px-6 grid gap-6">
         { todos.map(todo => <Todo key={todo.id} todo={todo} setTodos={setTodos} />) }
